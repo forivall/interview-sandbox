@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "references": [
+    { "path": "./config" },
+    { "path": "./src" },
+  ],
+  "include": ["vite.config.ts"],
+  "exclude": [
+    "src/**/*",
+    "config/**/*",
+  ]
+}
