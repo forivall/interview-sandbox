@@ -3,7 +3,7 @@ import React from 'react';
 import { apiKey } from '../config';
 // import AppRouting from './AppRouting';
 
-const styles = './App.module.css';
+import styles from './App.module.css';
 
 interface GiphyResults {
   data: GifObject[];
@@ -67,12 +67,12 @@ const SearchBox: React.VFC<{ onSearch: (value: string) => void }> = (props) => {
 const SearchResults: React.VFC<{ data: GifObject[] }> = (props) => {
   const { data } = props;
   return (
-    <div>
+    <div className={styles.gifContainer}>
       {data.map((gifObject) => {
         return (
-          <span key={gifObject.id}>
+          <div className={styles.gifPreview} key={gifObject.id}>
             <img src={gifObject.images.preview_gif.url} />
-          </span>
+          </div>
         );
       })}
     </div>

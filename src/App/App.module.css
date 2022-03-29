@@ -1,0 +1,13 @@
+.gifContainer {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-around; */
+  margin: auto;
+}
+
+.gifPreview {
+  width: 200px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
