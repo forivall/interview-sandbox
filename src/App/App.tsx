@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { apiKey } from '../config';
+import { useDebounce } from 'use-debounce';
 // import AppRouting from './AppRouting';
 
 import styles from './App.module.css';
@@ -47,19 +48,31 @@ const useGiphySearch = (term: string): [GiphyResults?, Error?] => {
   return [data, err];
 };
 
-const SearchBox: React.VFC<{ onSearch: (value: string) => void }> = (props) => {
-  const { onSearch } = props;
+interface SearchBoxProps {
+  onSearch?: (value: string) => void;
+  onSearchInputChange?: (value: string) => void;
+}
+
+const SearchBox: React.VFC<SearchBoxProps> = (props) => {
+  const { onSearch, onSearchInputChange } = props;
   const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        onSearch(searchInputRef.current?.value ?? '');
+        onSearch?.(searchInputRef.current?.value ?? '');
       }}
     >
-      Search! <input type="search" ref={searchInputRef} />
-      <input type="submit" value="Search!" />
+      Search!{' '}
+      <input
+        type="search"
+        ref={searchInputRef}
+        onChange={(event) => {
+          onSearchInputChange?.(event.currentTarget.value);
+        }}
+      />
+      {/* <input type="submit" value="Search!" /> */}
     </form>
   );
 };
@@ -80,7 +93,8 @@ const SearchResults: React.VFC<{ data: GifObject[] }> = (props) => {
 };
 
 const App: React.VFC = () => {
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTermInstant, setSearchTerm] = React.useState('');
+  const [searchTerm] = useDebounce(searchTermInstant, 150);
   const [results, err] = useGiphySearch(searchTerm);
 
   const searchBoxEl = (
